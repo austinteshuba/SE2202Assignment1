@@ -1,0 +1,290 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf600
+{\fonttbl\f0\fnil\fcharset0 Menlo-Regular;\f1\fnil\fcharset0 Menlo-BoldItalic;}
+{\colortbl;\red255\green255\blue255;\red109\green109\blue109;\red32\green32\blue32;\red191\green100\blue38;
+\red153\green168\blue186;\red254\green187\blue91;\red88\green118\blue71;\red133\green96\blue154;\red86\green132\blue173;
+}
+{\*\expandedcolortbl;;\csgenericrgb\c42745\c42745\c42745;\csgenericrgb\c12549\c12549\c12549;\csgenericrgb\c74902\c39216\c14902;
+\csgenericrgb\c60000\c65882\c72941;\csgenericrgb\c99608\c73333\c35686;\csgenericrgb\c34510\c46275\c27843;\csgenericrgb\c52157\c37647\c60392;\csgenericrgb\c33725\c51765\c67843;
+}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf2 \cb3 // Data Structures\
+\cf4 class \cf5 LineItem \{\
+    \cf6 constructor\cf5 (amount\cf4 , \cf5 type\cf4 , \cf5 month) \{\
+        \cf2 // Month\
+        \cf4 let \cf5 _month\cf4 ;\
+        this\cf5 .\cf6 setMonth \cf5 = \cf4 function\cf5 (month) \{\
+            \cf4 if \cf5 (\cf4 typeof \cf5 month === \cf7 "number"\cf5 ) \{\
+                _month = month\cf4 ;\
+                return;\
+            \cf5 \}\
+            \cf4 throw new 
+\f1\i\b \cf8 Error
+\f0\i0\b0 \cf5 (\cf7 "Invalid Month"\cf5 )\cf4 ;\
+        \cf5 \}\cf4 ;\
+        this\cf5 .\cf6 getMonth \cf5 = \cf4 function\cf5 () \{\
+            \cf4 return \cf5 _month\cf4 ;\
+        \cf5 \}\cf4 ;\
+        this\cf5 .\cf6 setMonth\cf5 (month)\cf4 ;\
+\
+        \cf2 // Type\
+        \cf4 let \cf5 _type\cf4 ;\
+        this\cf5 .\cf6 setType \cf5 = \cf4 function\cf5 (type) \{\
+            \cf4 if \cf5 (type.\cf6 toLowerCase\cf5 () === \cf7 "expense"\cf5 ) \{\
+                _type = \cf7 "expense"\cf4 ;\
+            \cf5 \} \cf4 else if \cf5 (type.\cf6 toLowerCase\cf5 () === \cf7 "revenue"\cf5 ) \{\
+                _type = \cf7 "revenue"\cf4 ;\
+            \cf5 \} \cf4 else \cf5 \{\
+                \cf4 throw new 
+\f1\i\b \cf8 Error
+\f0\i0\b0 \cf5 (\cf7 "Invalid Type"\cf5 )\cf4 ;\
+            \cf5 \}\
+        \}\cf4 ;\
+        this\cf5 .\cf6 getType \cf5 = \cf4 function\cf5 () \{\
+            \cf4 return \cf5 _type\cf4 ;\
+        \cf5 \}\cf4 ;\
+        this\cf5 .\cf6 setType\cf5 (type)\cf4 ;\
+\
+        \cf2 // Amount\
+        \cf4 let \cf5 _amount\cf4 ;\
+        this\cf5 .\cf6 setAmount \cf5 = \cf4 function\cf5 (amount) \{\
+            \cf4 if \cf5 (\cf4 typeof \cf5 amount === \cf7 "number"\cf5 ) \{\
+                _amount = amount\cf4 ;\
+                return;\
+            \cf5 \}\
+            \cf4 throw new 
+\f1\i\b \cf8 Error
+\f0\i0\b0 \cf5 (\cf7 "Invalid Amount"\cf5 )\cf4 ;\
+        \cf5 \}\cf4 ;\
+        this\cf5 .\cf6 getAmount \cf5 = \cf4 function\cf5 () \{\
+            \cf4 return \cf5 _amount\cf4 ;\
+        \cf5 \}\cf4 ;\
+        this\cf5 .\cf6 setAmount\cf5 (amount)\cf4 ;\
+    \cf5 \}\
+    \cf6 printItem\cf5 () \{\
+        
+\f1\i\b \cf8 console
+\f0\i0\b0 \cf5 .\cf6 log\cf5 (\
+            \cf7 `Type: \cf5 $\{\cf4 this\cf5 .\cf6 getType\cf5 ()\}\cf7 \
+            Amount: $\cf5 $\{\cf4 this\cf5 .\cf6 getAmount\cf5 ()\}\cf7 \
+            Month: \cf5 $\{\cf4 this\cf5 .\cf6 textMonth\cf5 ()\}\
+        \cf7 `\cf5 )\cf4 ;\
+    \cf5 \}\
+    \cf6 textMonth\cf5 () \{\
+        \cf4 switch\cf5 (\cf4 this\cf5 .\cf6 getMonth\cf5 ()) \{\
+            \cf4 case \cf9 1\cf5 :\
+                \cf4 return \cf7 "January"\cf4 ;\
+            case \cf9 2\cf5 :\
+                \cf4 return \cf7 "February"\cf4 ;\
+            case \cf9 3\cf5 :\
+                \cf4 return \cf7 "March"\cf4 ;\
+            case \cf9 4\cf5 :\
+                \cf4 return \cf7 "April"\cf4 ;\
+            case \cf9 5\cf5 :\
+                \cf4 return \cf7 "May"\cf4 ;\
+            case \cf9 6\cf5 :\
+                \cf4 return \cf7 "June"\cf4 ;\
+            case \cf9 7\cf5 :\
+                \cf4 return \cf7 "July"\cf4 ;\
+            case \cf9 8\cf5 :\
+                \cf4 return \cf7 "August"\cf4 ;\
+            case \cf9 9\cf5 :\
+                \cf4 return \cf7 "September"\cf4 ;\
+            case \cf9 10\cf5 :\
+                \cf4 return \cf7 "October"\cf4 ;\
+            case \cf9 11\cf5 :\
+                \cf4 return \cf7 "November"\cf4 ;\
+            case \cf9 12\cf5 :\
+                \cf4 return \cf7 "December"\cf4 ;\
+        \cf5 \}\
+    \}\
+\}\
+\
+\cf4 class \cf5 ChangedLineItem \cf4 extends \cf5 LineItem \{\
+    \cf6 constructor\cf5 (amount\cf4 , \cf5 type\cf4 , \cf5 month) \{\
+        \cf4 super\cf5 (amount\cf4 , \cf5 type\cf4 , \cf5 month)\cf4 ;\
+\
+        let \cf5 _amountChanged = \cf9 0\cf4 ;\
+        this\cf5 .\cf6 scaleAmount \cf5 = \cf4 function\cf5 (ratio) \{\
+            \cf4 if \cf5 (\cf4 this\cf5 .\cf6 getType\cf5 () === \cf7 "expense"\cf5 ) \{\
+                \cf4 let \cf5 oldAmount = \cf4 this\cf5 .\cf6 getAmount\cf5 ()\cf4 ;\
+                let \cf5 newAmount = oldAmount * ratio\cf4 ;\
+                \cf5 _amountChanged += newAmount - oldAmount\cf4 ;\
+                this\cf5 .\cf6 setAmount\cf5 (newAmount)\cf4 ;\
+            \cf5 \}\
+        \}\cf4 ;\
+        this\cf5 .\cf6 getAmountChanged \cf5 = \cf4 function\cf5 () \{\
+            \cf4 return \cf5 _amountChanged\cf4 ;\
+        \cf5 \}\
+    \}\
+\
+    \cf6 printItem\cf5 () \{\
+        
+\f1\i\b \cf8 console
+\f0\i0\b0 \cf5 .\cf6 log\cf5 (\
+            \cf7 `Type: \cf5 $\{\cf4 this\cf5 .\cf6 getType\cf5 ()\}\cf7 \
+            Amount: $\cf5 $\{\cf4 this\cf5 .\cf6 getAmount\cf5 ()\}\cf7 \
+            Month: \cf5 $\{\cf4 this\cf5 .\cf6 textMonth\cf5 ()\}\cf7 \
+            amountChanged: $\cf5 $\{\cf4 this\cf5 .\cf6 getAmountChanged\cf5 ()\}\
+        \cf7 `\cf5 )\cf4 ;\
+    \cf5 \}\
+\
+\
+\}\
+\
+\cf4 class \cf5 MonthSummary \{\
+    \cf6 constructor\cf5 (totalIncome\cf4 , \cf5 totalExpenses\cf4 , \cf5 carriedSurplus) \{\
+        \cf4 this\cf5 .\cf8 totalIncome \cf5 = totalIncome\cf4 ;\
+        this\cf5 .\cf8 totalExpenses \cf5 = totalExpenses\cf4 ;\
+        this\cf5 .\cf8 carriedSurplus \cf5 = 
+\f1\i\b \cf8 Math
+\f0\i0\b0 \cf5 .\cf6 max\cf5 (carriedSurplus\cf4 ,\cf9 0\cf5 )\cf4 ;\
+\
+        this\cf5 .\cf8 workingIncome \cf5 = \cf4 this\cf5 .\cf8 totalIncome \cf5 + \cf4 this\cf5 .\cf8 carriedSurplus\cf4 ;\
+        this\cf5 .\cf8 scalingRatio \cf5 = 
+\f1\i\b \cf8 Math
+\f0\i0\b0 \cf5 .\cf6 min\cf5 (\cf9 1\cf4 , this\cf5 .\cf8 workingIncome \cf5 / \cf4 this\cf5 .\cf8 totalExpenses\cf5 )\cf4 ;\
+    \cf5 \}\
+\}\
+\
+\
+\cf4 function \cf6 createSampleInput\cf5 () \{\
+    \cf4 let \cf5 retArr = []\cf4 ;\
+    for \cf5 (\cf4 let \cf5 i = \cf9 0\cf4 ; \cf5 i<\cf9 30\cf4 ; \cf5 i++) \{\
+        retArr.\cf6 push\cf5 (\cf4 new \cf5 LineItem(\cf6 getRandInt\cf5 (\cf9 1000\cf4 ,\cf9 3000\cf5 )\cf4 , \cf6 getRandInt\cf5 (\cf9 0\cf4 ,\cf9 1\cf5 ) === \cf9 1 \cf5 ? \cf7 "expense"\cf5 : \cf7 "revenue"\cf4 , \cf6 getRandInt\cf5 (\cf9 1\cf4 ,\cf9 12\cf5 )))\cf4 ;\
+    \cf5 \}\
+    \cf4 return \cf5 retArr\cf4 ;\
+\cf5 \}\
+\cf4 function \cf6 getRandInt\cf5 (min\cf4 , \cf5 max) \{\
+    \cf4 return \cf5 min + 
+\f1\i\b \cf8 Math
+\f0\i0\b0 \cf5 .\cf6 floor\cf5 (
+\f1\i\b \cf8 Math
+\f0\i0\b0 \cf5 .\cf6 random\cf5 ()*(max-min+\cf9 1\cf5 ))\cf4 ;\
+\cf5 \}\
+\
+\
+\cf2 // This gets all of the summaries and actions needed for the month.\
+// O(nlogn) due to sort.\
+\cf4 function \cf6 getIncomeSummaries\cf5 (lineItems) \{\
+    \cf2 // now sorted\
+    \cf5 lineItems.\cf6 sort\cf5 ((a\cf4 ,\cf5 b) => a.\cf6 getMonth\cf5 () >= b.\cf6 getMonth\cf5 () ? \cf9 1\cf5 : -\cf9 1\cf5 )\cf4 ;\
+\
+    for \cf5 (\cf4 let \cf5 o \cf4 of \cf5 lineItems) \{\
+        o.\cf6 printItem\cf5 ()\cf4 ;\
+    \cf5 \}\
+    \cf2 // Will store the income summaries\
+    \cf4 let \cf5 incomeSummaries = \{\}\cf4 ;\
+\
+\
+    let \cf5 carriedSurplus = \cf9 0\cf4 ;\
+\
+    let \cf5 currentMonth = \cf9 1\cf4 ;\
+    let \cf5 currentIncome = \cf9 0\cf4 ;\
+    let \cf5 currentExpenses = \cf9 0\cf4 ;\
+    for \cf5 (\cf4 let \cf5 i = \cf9 0\cf4 ; \cf5 i<=lineItems.\cf8 length\cf4 ; \cf5 i++) \{\
+        \cf4 if \cf5 (i===lineItems.\cf8 length\cf5 ) \{\
+            \cf2 // Create object for last month\
+            \cf5 incomeSummaries[currentMonth] = \cf4 new \cf5 MonthSummary(currentIncome\cf4 , \cf5 currentExpenses\cf4 , \cf5 carriedSurplus)\cf4 ;\
+            \cf2 // Update the accumulated surplus\
+            \cf4 if \cf5 (currentIncome >= currentExpenses) \{\
+                carriedSurplus += currentIncome - currentExpenses\cf4 ;\
+            \cf5 \} \cf4 else \cf5 \{\
+                carriedSurplus -= 
+\f1\i\b \cf8 Math
+\f0\i0\b0 \cf5 .\cf6 min\cf5 (carriedSurplus\cf4 , \cf5 currentExpenses - currentIncome)\cf4 ;\
+            \cf5 \}\
+\
+            \cf2 // Input empty months for any skipped months\
+            \cf4 for \cf5 (\cf4 let \cf5 i = currentMonth+\cf9 1\cf4 ; \cf5 i<=\cf9 12\cf4 ; \cf5 i++) \{\
+                incomeSummaries[i] = \cf4 new \cf5 MonthSummary(\cf9 0\cf4 ,\cf9 0\cf4 ,\cf5 carriedSurplus)\cf4 ;\
+            \cf5 \}\
+        \} \cf4 else \cf5 \{\
+            \cf4 let \cf5 o = lineItems[i]\cf4 ;\
+            if \cf5 (o.\cf6 getMonth\cf5 () !== currentMonth) \{\
+                \cf2 // Create object for last month\
+                \cf5 incomeSummaries[currentMonth] = \cf4 new \cf5 MonthSummary(currentIncome\cf4 , \cf5 currentExpenses\cf4 , \cf5 carriedSurplus)\cf4 ;\
+                \cf2 // Update the accumulated surplus\
+                \cf4 if \cf5 (currentIncome >= currentExpenses) \{\
+                    carriedSurplus += currentIncome - currentExpenses\cf4 ;\
+                \cf5 \} \cf4 else \cf5 \{\
+                    carriedSurplus -= 
+\f1\i\b \cf8 Math
+\f0\i0\b0 \cf5 .\cf6 min\cf5 (carriedSurplus\cf4 , \cf5 currentExpenses - currentIncome)\cf4 ;\
+                \cf5 \}\
+\
+                \cf2 // Input empty months for any skipped months\
+                \cf4 for \cf5 (\cf4 let \cf5 i = currentMonth + \cf9 1\cf4 ; \cf5 i < o.\cf6 getMonth\cf5 ()\cf4 ; \cf5 i++) \{\
+                    incomeSummaries[i] = \cf4 new \cf5 MonthSummary(\cf9 0\cf4 , \cf9 0\cf4 , \cf5 carriedSurplus)\cf4 ;\
+                \cf5 \}\
+\
+                \cf2 // Update the values\
+                \cf5 currentMonth = o.\cf6 getMonth\cf5 ()\cf4 ;\
+                \cf5 currentExpenses = \cf9 0\cf4 ;\
+                \cf5 currentIncome = \cf9 0\cf4 ;\
+            \cf5 \}\
+            \cf4 if \cf5 (o.\cf6 getType\cf5 () === \cf7 "revenue"\cf5 ) \{\
+                currentIncome += o.\cf6 getAmount\cf5 ()\cf4 ;\
+            \cf5 \} \cf4 else \cf5 \{\
+                currentExpenses += o.\cf6 getAmount\cf5 ()\cf4 ;\
+            \cf5 \}\
+        \}\
+    \}\
+    \cf2 // console.log(currentMonth);\
+\
+    \cf4 return \cf5 incomeSummaries\cf4 ;\
+\cf5 \}\
+\
+\cf4 function \cf6 changeLineItem\cf5 (lineItem\cf4 , \cf5 incomeSummaries) \{\
+    \cf4 let \cf5 changedLineItem = \cf4 new \cf5 ChangedLineItem(lineItem.\cf6 getAmount\cf5 ()\cf4 , \cf5 lineItem.\cf6 getType\cf5 ()\cf4 , \cf5 lineItem.\cf6 getMonth\cf5 ())\cf4 ;\
+    \cf5 changedLineItem.\cf6 scaleAmount\cf5 (incomeSummaries[lineItem.\cf6 getMonth\cf5 ()].\cf8 scalingRatio\cf5 )\cf4 ;\
+    return \cf5 changedLineItem\cf4 ;\
+\cf5 \}\
+\
+\cf4 function \cf6 mapLineItems\cf5 (lineItems\cf4 , \cf5 incomeSummaries) \{\
+    \cf4 let \cf5 newLineItems = []\cf4 ;\
+    for \cf5 (\cf4 let \cf5 o \cf4 of \cf5 lineItems) \{\
+        newLineItems.\cf6 push\cf5 (\cf6 changeLineItem\cf5 (o\cf4 , \cf5 incomeSummaries))\cf4 ;\
+    \cf5 \}\
+    \cf4 return \cf5 newLineItems\cf4 ;\
+\cf5 \}\
+\
+\cf2 // Test\
+\cf4 let 
+\f1\i\b \cf8 sampleInput 
+\f0\i0\b0 \cf5 = \cf6 createSampleInput\cf5 ()\cf4 ;\
+let 
+\f1\i\b \cf8 incomeSummaries 
+\f0\i0\b0 \cf5 = \cf6 getIncomeSummaries\cf5 (
+\f1\i\b \cf8 sampleInput
+\f0\i0\b0 \cf5 )\cf4 ;\
+let 
+\f1\i\b \cf8 newItems 
+\f0\i0\b0 \cf5 =  \cf6 mapLineItems\cf5 (
+\f1\i\b \cf8 sampleInput
+\f0\i0\b0 \cf4 , 
+\f1\i\b \cf8 incomeSummaries
+\f0\i0\b0 \cf5 )\cf4 ;\
+
+\f1\i\b \cf8 console
+\f0\i0\b0 \cf5 .\cf6 log\cf5 (\cf7 "////////////////// New Items ///////////////////"\cf5 )\cf4 ;\
+for \cf5 (\cf4 let 
+\f1\i\b \cf8 o 
+\f0\i0\b0 \cf4 of 
+\f1\i\b \cf8 newItems
+\f0\i0\b0 \cf5 ) \{\
+    
+\f1\i\b \cf8 o
+\f0\i0\b0 \cf5 .\cf6 printItem\cf5 ()\cf4 ;\
+\cf5 \}\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+}

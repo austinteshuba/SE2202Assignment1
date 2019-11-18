@@ -90,8 +90,8 @@ class ChangedLineItem extends LineItem {
         this.scaleAmount = function(ratio) {
             if (this.getType() === "expense") {
                 let oldAmount = this.getAmount();
-                let newAmount = oldAmount * ratio;
-                _amountChanged += newAmount - oldAmount;
+                let newAmount = Number((oldAmount * ratio).toFixed(2));
+                _amountChanged += Number((newAmount - oldAmount).toFixed(2));
                 this.setAmount(newAmount);
             }
         };
