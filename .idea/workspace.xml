@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9afc1bef-737c-497a-a37c-e4a16b370cdc" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/main.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RoughAssignment1.rtf" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/main.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -67,7 +68,7 @@
       <option name="presentableId" value="Default" />
       <updated>1574028927103</updated>
       <workItem from="1574028928294" duration="6438000" />
-      <workItem from="1574040827285" duration="582000" />
+      <workItem from="1574040827285" duration="3386000" />
     </task>
     <servers />
   </component>
