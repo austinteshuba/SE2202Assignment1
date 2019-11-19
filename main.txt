@@ -16,16 +16,26 @@ class LineItem {
         // 1 is january, 2 is february, etc.
         // Month must be a number, or this is invalid/
         this.setMonth = function(month) {
-            if (typeof month === "number" && month >=1 && month <= 12) {
+            if (typeof month === "number" && month >=1 && month <= 13) {
                 _month = month;
                 return;
             }
             throw new Error("Invalid Month");
         };
+        this.incrementMonth = function () {
+            this.setMonth(this.getMonth() + 1);
+        };
         this.getMonth = function() {
             return _month;
         };
         this.setMonth(month);
+
+
+        let _originalMonth = month;
+        this.getOriginalMonth = function () {
+            return _originalMonth;
+        };
+
 
         // Type with getter and setter
         let _type;
@@ -61,15 +71,24 @@ class LineItem {
     }
     // This is a helper method to print out the instance's properties
     printItem() {
-        console.log(
-            `Type: ${this.getType()}
+        if (this.getType() === "revenue") {
+            console.log(
+                `Type: ${this.getType()}
             Amount: $${this.getAmount()}
-            Month: ${this.textMonth()}
+            Month: ${this.textMonth(this.getOriginalMonth())}
         `);
+        } else {
+            console.log(
+                `Type: ${this.getType()}
+            Amount: $${this.getAmount()}
+            Original Month: ${this.textMonth(this.getOriginalMonth())}
+            Suggested Month: ${this.textMonth(this.getMonth())}
+        `);
+        }
     }
     // This is a helper method for the print function which displays the numerical month as the english month.
-    textMonth() {
-        switch(this.getMonth()) {
+    textMonth(month) {
+        switch(month) {
             case 1:
                 return "January";
             case 2:
@@ -94,183 +113,90 @@ class LineItem {
                 return "November";
             case 12:
                 return "December";
+            case 13:
+                return "Next Fiscal Year";
         }
     }
 }
-// The Changed Line Item class is a subclass of the LineItem that
-// includes information about the original line item + the amount it has changed
-class ChangedLineItem extends LineItem {
-    constructor(amount, type, month) {
-        super(amount, type, month);
+function suggestBudget(lineItems) {
 
-        let _amountChanged = 0;
-        // Scaling the amount takes a scaling ratio.
-        // By multiplying the old amount of the lineitem by the scaling ratio
-        // We can suggest an appropriate decrease of budget.
-        // We will track the amount changed with a new local property, accessible by a public getter.
-        this.scaleAmount = function(ratio) {
-            if (this.getType() === "expense") {
-                let oldAmount = this.getAmount();
-                let newAmount = Number((oldAmount * ratio).toFixed(2));
-                _amountChanged += Number((newAmount - oldAmount).toFixed(2));
-                this.setAmount(newAmount);
-            }
-        };
-        this.getAmountChanged = function() {
-            return _amountChanged;
-        }
+    // Step Zero: Print Input
+    console.log("//////// Old Transactions ////////");
+    lineItems.sort((a,b) => a.getMonth() > b.getMonth() ? 1:-1);
+    for (let o of lineItems) {
+        o.printItem();
     }
+    // Step One: Populate hashmap (i.e. object) with the expenses
+    let monthExpenses = {}; // Object to hold all expenses for the month. Month : [lineItems]
+    let monthRevenues = {}; // Object to hold bank balances from each month
+    let monthRevenuesLineItems = {}; // Object to hold revenue line items, purely for output.
 
-    // This is an override of the printitem method from the superclass.
-    // This simply adds the amount changed property.
-    printItem() {
-        console.log(
-            `Type: ${this.getType()}
-            Amount: $${this.getAmount()}
-            Month: ${this.textMonth()}
-            amountChanged: $${this.getAmountChanged()}
-        `);
+    // Init all the objects with empty lists / empty dollar values
+    for (let i = 1; i<=13; i++) {
+        monthExpenses[i] = [];
+        monthRevenues[i] = 0;
+        monthRevenuesLineItems[i] = [];
     }
-
-
-}
-// This class includes all of the relevant information about a month which
-// Will allow us to make appropriate scaling decisions.
-// Total income tracks the month's revenues,
-// total expenses tracks the month's expenses,
-// and the carried surplus is the excess capital from the month previous that we have access to
-class MonthSummary {
-    constructor(totalIncome, totalExpenses, carriedSurplus) {
-        this.totalIncome = totalIncome;
-        this.totalExpenses = totalExpenses;
-        // The carried surplus cannot be negative.
-        this.carriedSurplus = Math.max(carriedSurplus,0);
-
-        // The working income is how much money we have available to cover expenses in this month
-        this.workingIncome = this.totalIncome + this.carriedSurplus;
-
-        // THIS IS IMPORTANT
-        // The scaling ratio is the amount we have to multiply all of the expenses by for
-        // that month to ensure the total expenses does not exceed the total revenue for the month
-        // We get this by getting the quotient of working income and total expenses.
-        // If this number is above one, set the scaling ratio to one.
-        this.scalingRatio = Math.min(1, this.workingIncome / this.totalExpenses);
-    }
-}
-
-
-// This gets all of the summaries and actions needed for the month.
-// O(nlogn) due to sort.
-// Process
-// 1: Sort the list so all of the l;ine items are in chronilogical order.
-function getIncomeSummaries(lineItems) {
-    // Sort in ascending order by month (January -> December)
-    lineItems.sort((a,b) => a.getMonth() >= b.getMonth() ? 1: -1);
-
-    // Uncomment this for testing
-
-    // for (let o of lineItems) {
-    //     o.printItem();
-    // }
-
-
-    let incomeSummaries = {}; // stores income summaries
-    let carriedSurplus = 0; // stored the excess funds available from the previous months
-
-    let currentMonth = 1; // start at january
-    let currentIncome = 0; // Start with an empty counter of income and expenses
-    let currentExpenses = 0;
-
-    for (let i = 0; i<=lineItems.length; i++) {
-        // If we have reached the end of the list
-        if (i===lineItems.length) {
-            // Create object for last month
-            incomeSummaries[currentMonth] = new MonthSummary(currentIncome, currentExpenses, carriedSurplus);
-            // Update the accumulated surplus
-            if (currentIncome >= currentExpenses) {
-                // There are excess funds available
-                carriedSurplus += currentIncome - currentExpenses;
-            } else {
-                // We have to dip into the carried surplus. Do not subtract more than the available balance.
-                carriedSurplus -= Math.min(carriedSurplus, currentExpenses - currentIncome);
-            }
-
-            // Input empty months for any skipped months
-            for (let i = currentMonth+1; i<=12; i++) {
-                incomeSummaries[i] = new MonthSummary(0,0,carriedSurplus);
-            }
+    //iterate through the line items and add to the appropriate object
+    for (let o of lineItems) {
+        if (o.getType() === 'expense') {
+            monthExpenses[o.getMonth()].push(o);
         } else {
-            let o = lineItems[i]; // get the line item
-            if (o.getMonth() !== currentMonth) {
-                // If we have moved on to a new month, make a summary account for that month.
-                incomeSummaries[currentMonth] = new MonthSummary(currentIncome, currentExpenses, carriedSurplus);
-                // Update the accumulated surplus
-                if (currentIncome >= currentExpenses) {
-                    // excess income
-                    carriedSurplus += currentIncome - currentExpenses;
-                } else {
-                    // We must dip into our reserve cash to pay expenses.
-                    // Do not subtract more than the available balance
-                    carriedSurplus -= Math.min(carriedSurplus, currentExpenses - currentIncome);
-                }
+            monthRevenues[o.getMonth()] = monthRevenues[o.getMonth()] + o.getAmount();
+            monthRevenuesLineItems[o.getMonth()].push(o);
+        }
+    }
+    // Step Two: Suggest new months
+    let currentBank = 0; // This is the current bank balance. It cannot go below 0
+    for (let i = 1; i<=12; i++) {
+        // add the revenues to the balance
+        currentBank += monthRevenues[i];
+        // Sort the expenses by the amount of money they are
+        let expenses = monthExpenses[i];
+        // Prioritize expenses that have been pushed off, then prioritize larger expenses.
 
-                // Input empty months for any skipped months
-                for (let i = currentMonth + 1; i < o.getMonth(); i++) {
-                    incomeSummaries[i] = new MonthSummary(0, 0, carriedSurplus);
-                }
-
-                // Update the month to the current month, reset the expenses and income counters
-                currentMonth = o.getMonth();
-                currentExpenses = 0;
-                currentIncome = 0;
+        function prioritize(a,b) {
+            if (a.getOriginalMonth() < b.getOriginalMonth()) {
+                // A is earlier than b, a is first
+                return -1;
             }
-            // Now that we handled the case that we entered a new month, we can simply increment the appropriate counters.
-            if (o.getType() === "revenue") {
-                currentIncome += o.getAmount();
+            else if (a.getAmount() > b.getAmount() && a.getOriginalMonth() === b.getOriginalMonth()) {
+                // if a is worth more, it's first
+                return -1;
+            }
+            return 1; // otherwise, a is last and b is first
+        }
+        expenses.sort(prioritize);
+
+        monthExpenses[i] = []; // Start by emptying out the month expenses.
+        for(let j = 0; j<expenses.length; j++) {
+            if (expenses[j].getAmount() <= currentBank) { // if we can afford it, add it to the current month
+                currentBank -= expenses[j].getAmount();
+                monthExpenses[i].push(expenses[j]);
             } else {
-                currentExpenses += o.getAmount();
+                // We cannot afford this line item, so add it to the next month.
+                expenses[j].incrementMonth();
+                monthExpenses[i+1].push(expenses[j]);
             }
         }
     }
-    // console.log(currentMonth);
 
-    return incomeSummaries;
-}
-
-// This is a function that will be used to map old line items to a new, changed line item object with a scaled amount
-function changeLineItem(lineItem, incomeSummaries) {
-    let changedLineItem = new ChangedLineItem(lineItem.getAmount(), lineItem.getType(), lineItem.getMonth());
-    changedLineItem.scaleAmount(incomeSummaries[lineItem.getMonth()].scalingRatio); // scale the amount by the scaling ratio in the relevant month
-    return changedLineItem;
-}
-
-// This is a map function that will change all of the LineItem instances in the lineItems list to ChangedLineItem objects
-function mapLineItems(lineItems, incomeSummaries, mapFunction) {
-    let newLineItems = [];
-    for (let o of lineItems) {
-        newLineItems.push(mapFunction(o, incomeSummaries));
+    // Step Three: Return a list with all of the line items
+    let retArr = [];
+    for (let i = 1; i<=13; i++) {
+        retArr = retArr.concat(monthRevenuesLineItems[i]);
+        retArr = retArr.concat(monthExpenses[i]);
+        // console.log(retArr);
     }
-    return newLineItems;
+    return retArr;
 }
 
-// This is the function that will call the appropriate functions to suggest new budgets
-// By default, if an input is not given, it will use a random one generated for testing.
-function suggestNewBudgets(lineItems = createSampleInput()) {
-    let incomeSummaries = getIncomeSummaries(lineItems);
-    let changedItems = mapLineItems(lineItems, incomeSummaries, changeLineItem);
-
-    // Print!
-    console.log("Previous Line Items:");
-    for (let o of lineItems) {
+function suggestNewBudgets(lineItems=createSampleInput()) {
+    let newLineItems = suggestBudget(lineItems);
+    console.log("////////////////// New Inputs ///////////////////");
+    for (let o of newLineItems) {
         o.printItem();
     }
-
-    console.log("This is the suggested budget, based on an equal scaling method");
-    console.log("All budgets scaled by the same percentage/ratio");
-    for (let o of changedItems) {
-        o.printItem();
-    }
-    return changedItems;
 }
 
 // Test Section
@@ -280,8 +206,10 @@ function suggestNewBudgets(lineItems = createSampleInput()) {
 // n is the number of entries desired.
 function createSampleInput(n=30) {
     let retArr = [];
-    for (let i = 0; i<n; i++) {
-        retArr.push(new LineItem(getRandInt(1000,3000), getRandInt(0,1) === 1 ? "expense": "revenue", getRandInt(1,12)));
+    for (let i = 0; i<n/2; i++) {
+        retArr.push(new LineItem(getRandInt(2000,3000), "revenue", getRandInt(1,12)));
+        retArr.push(new LineItem(getRandInt(2000,3000), "expense", getRandInt(1,12)));
+
     }
     return retArr;
 }
