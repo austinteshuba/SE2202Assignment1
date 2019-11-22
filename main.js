@@ -31,6 +31,7 @@ class LineItem {
         this.setMonth(month);
 
 
+        // the original month will keep track of when the transaction initially was.
         let _originalMonth = month;
         this.getOriginalMonth = function () {
             return _originalMonth;
@@ -54,7 +55,7 @@ class LineItem {
         };
         this.setType(type);
 
-        // Amount
+        // Amount getter and setter
         let _amount;
         // Amount must be a dollar value, or an error will be thrown.
         this.setAmount = function(amount) {
@@ -71,13 +72,15 @@ class LineItem {
     }
     // This is a helper method to print out the instance's properties
     printItem() {
-        if (this.getType() === "revenue") {
+        // if the item is a revenue or the original month is the same as the current month, make it cleaner by only printing the current month
+        if (this.getType() === "revenue" || this.getOriginalMonth() === this.getMonth()) {
             console.log(
                 `Type: ${this.getType()}
             Amount: $${this.getAmount()}
             Month: ${this.textMonth(this.getOriginalMonth())}
         `);
         } else {
+            // If the item is an expense and the month has been changed, show the changes.
             console.log(
                 `Type: ${this.getType()}
             Amount: $${this.getAmount()}
@@ -155,6 +158,7 @@ function suggestBudget(lineItems) {
         let expenses = monthExpenses[i];
         // Prioritize expenses that have been pushed off, then prioritize larger expenses.
 
+        // Sort function that will prioritize months, then amounts. This will ensure we are paying the most relevant expenses first.
         function prioritize(a,b) {
             if (a.getOriginalMonth() < b.getOriginalMonth()) {
                 // A is earlier than b, a is first
@@ -166,7 +170,7 @@ function suggestBudget(lineItems) {
             }
             return 1; // otherwise, a is last and b is first
         }
-        expenses.sort(prioritize);
+        expenses.sort(prioritize); // prioritize all current expenses.
 
         monthExpenses[i] = []; // Start by emptying out the month expenses.
         for(let j = 0; j<expenses.length; j++) {
@@ -190,7 +194,8 @@ function suggestBudget(lineItems) {
     }
     return retArr;
 }
-
+// Function called for outputs.
+// Uses a random input to start
 function suggestNewBudgets(lineItems=createSampleInput()) {
     let newLineItems = suggestBudget(lineItems);
     console.log("////////////////// New Inputs ///////////////////");
@@ -219,7 +224,37 @@ function getRandInt(min, max) {
 }
 
 // Test Command
-suggestNewBudgets();
+// Object for test inputs (easier to debug when you don't have a random input.
+let testInputs = [
+    new LineItem(1000, "expense", 1),
+    new LineItem(2000, "expense", 2),
+    new LineItem(756, "expense", 3),
+    new LineItem(1040, "expense", 3),
+    new LineItem(1340, "expense", 4),
+    new LineItem(10, "expense", 2),
+    new LineItem(2555, "expense", 5),
+    new LineItem(3333, "expense", 6),
+    new LineItem(2000, "expense", 8),
+    new LineItem(3000, "expense", 7),
+    new LineItem(1100, "expense", 9),
+    new LineItem(1001, "expense", 10),
+    new LineItem(1004, "expense", 11),
+    new LineItem(130, "expense", 10),
+    new LineItem(300, "expense", 1),
+    new LineItem(1, "expense", 2),
+    new LineItem(4000, "expense", 12),
+    new LineItem(20, "expense", 12),
+    new LineItem(2000, "revenue", 12),
+    new LineItem(1500, "revenue", 2),
+    new LineItem(3000, "revenue", 2),
+    new LineItem(500, "revenue", 4),
+    new LineItem(4000, "revenue", 5),
+    new LineItem(6000, "revenue", 8),
+    new LineItem(9000, "revenue", 9),
+    new LineItem(1000, "revenue", 12),
+];
+suggestNewBudgets(testInputs); // call the function which will trigger the appropriate calculations.
+
 
 
 
