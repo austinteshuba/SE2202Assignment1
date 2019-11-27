@@ -3,7 +3,7 @@
 // n is the number of entries desired.
 
 // Import the appropriate functions / classes
-let getRandInt = require('/getRandInt');
+let getRandInt = require('./getRandInt');
 let LineItem = require('./LineItem');
 function createSampleInput(n=30) {
     let retArr = [];
