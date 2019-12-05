@@ -3,9 +3,9 @@
 // n is the number of entries desired.
 
 // Import the appropriate functions / classes
-let getRandInt = require('./getRandInt');
-let LineItem = require('./LineItem');
-function createSampleInput(n=30) {
+// let getRandInt = require('./getRandInt');
+// let LineItem = require('./LineItem');
+function createSampleInput(getRandInt,LineItem, n=30) {
     let retArr = [];
     for (let i = 0; i<n/2; i++) {
         retArr.push(new LineItem(getRandInt(2000,3000), "revenue", getRandInt(1,12)));
